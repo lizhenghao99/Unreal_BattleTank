@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankPlayerController.h"
+#include "Tank.h"
 
 void ATankPlayerController::BeginPlay()
 {
@@ -42,6 +43,7 @@ void ATankPlayerController::AimTowardsCrosshair()
 	}
 	else
 	{
+		return;
 		UE_LOG(LogTemp, Error, TEXT("Line trace FAILED"))
 	}
 }
