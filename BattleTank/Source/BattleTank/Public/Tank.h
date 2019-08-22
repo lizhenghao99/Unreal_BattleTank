@@ -7,6 +7,7 @@
 #include "Tank.generated.h"
 
 class UTankAimingComponent;
+class UTankMovementComponent;
 class UTankBarrel;
 class UTankTurret;
 class AProjectile;
@@ -26,6 +27,9 @@ protected:
 
 	UTankAimingComponent* TankAimingComponent = nullptr;
 
+	UPROPERTY(BlueprintReadOnly)
+	UTankMovementComponent* TankMovementComponent = nullptr;
+
 public:	
 
 	// Called to bind functionality to input
@@ -43,12 +47,18 @@ public:
 	void fire();
 
 private:
-	UPROPERTY(EditAnywhere, Category = Firing)
-	float LaunchSpeed = 4000.0; // TODO find sensible default
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
+	TSubclassOf<AProjectile> ProjectileBlueprint;
 
-	UPROPERTY(EditAnywhere, Category = Setup)
-	TSubclassOf<AProjectile> ProjectileBlueprint; 
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	float LaunchSpeed = 4000.0; 
+
+	// fire rate
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	float ReloadTimeInSeconds = 3.0;
 
 	// local barrel reference for spawning projectile
 	UTankBarrel* Barrel = nullptr;
+
+	double LastFireTime = 0.0;
 };
