@@ -13,10 +13,39 @@ void UTankMovementComponent::Initialise(
 	RightTrack = RightTrackToSet;
 }
 
+
+// AI movement control
+void UTankMovementComponent::RequestDirectMove(
+	const FVector& MoveVelocity, bool bForceMaxSpeed)
+{
+	// no need to call super as we're replacing functionality
+
+	// normalize AI tank foward and velocity vector
+	FVector TankForward = GetOwner()->GetActorForwardVector().GetSafeNormal();
+	FVector AIForwardIntention = MoveVelocity.GetSafeNormal();
+	
+	// calculate relative forward throw (cosine delta theta)
+	float ForwardThrow = FVector::DotProduct(TankForward, AIForwardIntention);
+	IntendMoveForward(ForwardThrow);
+
+	// calculate relative turn throw (sine delta theta)
+	float RightThrow =
+		FVector::CrossProduct(TankForward, AIForwardIntention).Z;
+	IntendTurnRight(RightThrow);
+
+	UE_LOG(LogTemp, Warning, TEXT("%s vectoring to %s"), *GetOwner()->GetName(),
+		*AIForwardIntention.ToString())
+}
+
+// Tank movement control
 void UTankMovementComponent::IntendMoveForward(float Throw)
 {
-	//UE_LOG(LogTemp, Warning, TEXT("Intend move foward throw: %f"), Throw);
-
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(Throw);
+}
+
+void UTankMovementComponent::IntendTurnRight(float Throw)
+{
+	LeftTrack->SetThrottle(Throw);
+	RightTrack->SetThrottle(-Throw);
 }

@@ -5,7 +5,7 @@
 
 void UTankTrack::SetThrottle(float Throttle)
 {
-	UE_LOG(LogTemp, Warning, TEXT("%f"), Throttle);
+	//UE_LOG(LogTemp, Warning, TEXT("%f"), Throttle);
 	// TODO: clamp force applied
 
 	// add force to tank from track
