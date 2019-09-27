@@ -9,9 +9,10 @@
 #include "TankPlayerController.generated.h"
 
 class ATank;
+class UTankAimingComponent;
 
 /**
- * 
+ * Helps player aiming
  */
 UCLASS()
 class BATTLETANK_API ATankPlayerController : public APlayerController
@@ -28,6 +29,10 @@ public:
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaTime) override;
+
+protected:
+	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
+	void FoundAimingComponent(UTankAimingComponent* AimCompRef);
 
 private:
 	UPROPERTY(EditDefaultsOnly)
