@@ -29,6 +29,8 @@ void ATankPlayerController::Tick(float DeltaTime)
 
 void ATankPlayerController::AimTowardsCrosshair()
 {
+	if (!GetPawn()) { return; } // exit if not possessing a tank
+
 	UTankAimingComponent* AimingComponent =
 		GetPawn()->FindComponentByClass<UTankAimingComponent>(); 
 	if (!ensure(AimingComponent)) { return; }
