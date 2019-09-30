@@ -5,17 +5,32 @@
 
 UTankTrack::UTankTrack()
 {
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 }
 
-void UTankTrack::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UTankTrack::BeginPlay()
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	
+	Super::BeginPlay();
+
+	OnComponentHit.AddDynamic(this, &UTankTrack::OnHit);
+}
+
+void UTankTrack::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComponent, FVector NormalImpulse, 
+	const FHitResult& Hit)
+{
+	DriveTrack();
+	ApplySidewaysForce();
+	CurrentThrottle = 0;
+}
+
+void UTankTrack::ApplySidewaysForce()
+{
 	// calculate slippage speed (sideway component of velocity)
 	float SlippageSpeed = FVector::DotProduct(
 		GetRightVector(), GetComponentVelocity());
 	// work-out the required acceleration this frame to corrects
+	float DeltaTime = GetWorld()->GetDeltaSeconds();
 	FVector CorrectionAcceleration = -(SlippageSpeed / DeltaTime) * GetRightVector();
 	// calculate and apply sideway force
 	auto TankRoot = Cast<UStaticMeshComponent>(GetOwner()->GetRootComponent());
@@ -26,11 +41,13 @@ void UTankTrack::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompo
 
 void UTankTrack::SetThrottle(float Throttle)
 {
-	//UE_LOG(LogTemp, Warning, TEXT("%f"), Throttle);
-	// TODO: clamp force applied
+	CurrentThrottle = CurrentThrottle + Throttle;
+}
 
+void UTankTrack::DriveTrack()
+{
 	// add force to tank from track
-	FVector ForceApplied = GetForwardVector() * Throttle * TrackMaxDrivingForce;
+	FVector ForceApplied = GetForwardVector() * CurrentThrottle * TrackMaxDrivingForce;
 	FVector ForceLocation = GetComponentLocation();
 	// get tank root
 	UPrimitiveComponent* TankRoot = Cast<UPrimitiveComponent>(
