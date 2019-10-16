@@ -59,6 +59,12 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 	// destroy mesh
 	SetRootComponent(ImpactBlast);
 	CollisionMesh->DestroyComponent();
+	// deal damage
+	UGameplayStatics::ApplyRadialDamage(
+		this, ProjectileDamage, GetActorLocation(), ExplosionForce->Radius,
+		UDamageType::StaticClass(),
+		TArray<AActor*>() // ignore no actors
+	);
 	// destroy projectile
 	FTimerHandle Timer;
 	GetWorld()->GetTimerManager().SetTimer(Timer, this,

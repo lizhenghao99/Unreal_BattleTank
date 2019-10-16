@@ -23,4 +23,9 @@ private:
 	virtual void Tick(float DeltaTime) override;
 
 	float AcceptanceRadius = 8000; // how close can AI tank get around player
+
+	virtual void SetPawn(APawn* InPawn) override;
+
+	UFUNCTION()
+	void OnPossessedTankDeath();
 };
