@@ -24,6 +24,7 @@ public:
 
 	virtual void BeginPlay() override;
 
+
 	virtual void Tick(float DeltaTime) override;
 
 protected:
@@ -41,4 +42,9 @@ private:
 	bool GetSightRayHitLocation(FVector& OutLocation) const;
 	bool GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection) const;
 	bool GetLookVectorHitLocation(FVector& LookDirection, FVector& OutLocation) const;
+
+	virtual void SetPawn(APawn* InPawn) override;
+
+	UFUNCTION()
+	void OnPossessedTankDeath();
 };

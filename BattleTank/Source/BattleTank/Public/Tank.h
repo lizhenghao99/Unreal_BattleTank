@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "Tank.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTankDelegate);
@@ -33,6 +34,9 @@ public:
 
 	// Dynamic Multicast Delegate
 	FTankDelegate OnDeath;
+
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	void Initialise(UParticleSystemComponent* DeathFireToSet);
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -42,5 +46,8 @@ private:
 	int32 StartingHealth = 100;
 
 	UPROPERTY(VisibleAnywhere, Category = "Health")
-	int32 CurrentHealth = StartingHealth;
+	int32 CurrentHealth; // initialised in beginplay
+
+	UPROPERTY(VisibleAnywhere)
+	UParticleSystemComponent* DeathFire = nullptr;
 };

@@ -73,7 +73,7 @@ private:
 	float LaunchSpeed = 4000.0; 
 
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
-	int32 RoundsLeft = 3;
+	int32 RoundsLeft = 10;
 
 	// fire rate
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
