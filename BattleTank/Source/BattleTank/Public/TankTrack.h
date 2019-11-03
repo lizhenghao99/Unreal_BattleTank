@@ -7,6 +7,8 @@
 #include "Engine/World.h"
 #include "TankTrack.generated.h"
 
+class ASprungWheel;
+
 /**
  * TankTrack is used to set maximum driving force, 
  * and to apply forces to the tank.
@@ -21,23 +23,15 @@ public:
 
 	virtual void BeginPlay() override;
 
-	void ApplySidewaysForce();
-
 	UFUNCTION(BlueprintCallable, Category = Input)
 	void SetThrottle(float Throttle);
 
 private:
-	// hit event delegate function
-	UFUNCTION()
-	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
-		UPrimitiveComponent* OtherComponent, FVector NormalImpulse,
-		const FHitResult& Hit);
-
-	void DriveTrack();
-
-	float CurrentThrottle = 0;
+	void DriveTrack(float CurrentThrottle);
 
 	// max force in N
 	UPROPERTY(EditDefaultsOnly, Category = Throttle)
 	float TrackMaxDrivingForce = 40000000.0; // assume 10m/s^2 acc
+
+	TArray<ASprungWheel*> GetWheels() const;
 };
